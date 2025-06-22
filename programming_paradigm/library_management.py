@@ -1,77 +1,52 @@
-from library_management import Book, Library
+class Book:
+    """A class representing a book in the library."""
+    
+    def __init__(self, title, author):
+        """Initialize a Book with title and author."""
+        self.title = title
+        self.author = author
+        self._is_checked_out = False
+    
+    def check_out(self):
+        """Mark the book as checked out."""
+        self._is_checked_out = True
+    
+    def return_book(self):
+        """Mark the book as returned (available)."""
+        self._is_checked_out = False
+    
+    def is_available(self):
+        """Check if the book is available."""
+        return not self._is_checked_out
 
-def enhanced_demo():
-    """
-    Enhanced demonstration of the library management system.
-    Shows additional features and edge cases.
-    """
-    print("=" * 60)
-    print("ENHANCED LIBRARY MANAGEMENT SYSTEM DEMO")
-    print("=" * 60)
-    
-    # Create library and add books
-    library = Library()
-    
-    # Add various books
-    books_to_add = [
-        Book("To Kill a Mockingbird", "Harper Lee"),
-        Book("1984", "George Orwell"),
-        Book("Pride and Prejudice", "Jane Austen"),
-        Book("The Great Gatsby", "F. Scott Fitzgerald"),
-        Book("Brave New World", "Aldous Huxley")
-    ]
-    
-    print("📚 Adding books to library...")
-    for book in books_to_add:
-        library.add_book(book)
-        print(f"Added: {book}")
-    
-    print(f"\n📊 Library Statistics:")
-    print(f"Total books: {library.get_book_count()}")
-    print(f"Available books: {library.get_available_count()}")
-    
-    print("\n📋 All books in library:")
-    library.list_all_books()
-    
-    print("\n✅ Available books:")
-    library.list_available_books()
-    
-    # Check out some books
-    print("\n📤 Checking out books...")
-    books_to_checkout = ["1984", "Pride and Prejudice", "Nonexistent Book"]
-    
-    for title in books_to_checkout:
-        success = library.check_out_book(title)
-        if success:
-            print(f"✅ Successfully checked out: {title}")
-        else:
-            print(f"❌ Could not check out: {title}")
-    
-    print(f"\n📊 Updated Statistics:")
-    print(f"Total books: {library.get_book_count()}")
-    print(f"Available books: {library.get_available_count()}")
-    
-    print("\n📋 All books status:")
-    library.list_all_books()
-    
-    print("\n✅ Currently available books:")
-    library.list_available_books()
-    
-    # Return some books
-    print("\n📥 Returning books...")
-    books_to_return = ["1984", "Nonexistent Book"]
-    
-    for title in books_to_return:
-        success = library.return_book(title)
-        if success:
-            print(f"✅ Successfully returned: {title}")
-        else:
-            print(f"❌ Could not return: {title}")
-    
-    print("\n✅ Final available books:")
-    library.list_available_books()
-    
-    print("\n" + "=" * 60)
 
-if __name__ == "__main__":
-    enhanced_demo()
+class Library:
+    """A class representing a library that manages books."""
+    
+    def __init__(self):
+        """Initialize the library with an empty list of books."""
+        self._books = []
+    
+    def add_book(self, book):
+        """Add a book to the library."""
+        self._books.append(book)
+    
+    def check_out_book(self, title):
+        """Check out a book by title."""
+        for book in self._books:
+            if book.title == title and book.is_available():
+                book.check_out()
+                return
+    
+    def return_book(self, title):
+        """Return a book by title."""
+        for book in self._books:
+            if book.title == title and not book.is_available():
+                book.return_book()
+                return
+    
+    def list_available_books(self):
+        """List all available books in the library."""
+        for book in self._books:
+            if book.is_available():
+                print(f"{book.title} by {book.author}")
