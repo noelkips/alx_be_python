@@ -1,28 +1,40 @@
-import sys
-from bank_account import BankAccount
-
-def main():
-    account = BankAccount(100)  # Example starting balance
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <command>:<amount>")
-        print("Commands: deposit, withdraw, display")
-        sys.exit(1)
-
-    command, *params = sys.argv[1].split(':')
-    amount = float(params[0]) if params else None
-
-    if command == "deposit" and amount is not None:
-        account.deposit(amount)
-        print(f"Deposited: ${amount}")
-    elif command == "withdraw" and amount is not None:
-        if account.withdraw(amount):
-            print(f"Withdrew: ${amount}")
+vaclass BankAccount:
+    """A class representing a bank account with basic banking operations."""
+    
+    def __init__(self, initial_balance=0):
+        """
+        Initialize a BankAccount with an optional initial balance.
+        
+        Args:
+            initial_balance (float): Starting balance for the account (default: 0)
+        """
+        self.account_balance = initial_balance
+    
+    def deposit(self, amount):
+        """
+        Deposit money into the account.
+        
+        Args:
+            amount (float): Amount to deposit
+        """
+        self.account_balance += amount
+    
+    def withdraw(self, amount):
+        """
+        Withdraw money from the account if sufficient funds are available.
+        
+        Args:
+            amount (float): Amount to withdraw
+            
+        Returns:
+            bool: True if withdrawal successful, False if insufficient funds
+        """
+        if amount <= self.account_balance:
+            self.account_balance -= amount
+            return True
         else:
-            print("Insufficient funds.")
-    elif command == "display":
-        account.display_balance()
-    else:
-        print("Invalid command.")
-
-if __name__ == "__main__":
-    main()
+            return False
+    
+    def display_balance(self):
+        """Display the current account balance in a user-friendly format."""
+        print(f"Current Balance: ${self.account_balance}")
